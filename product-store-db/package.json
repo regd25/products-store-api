@@ -1,0 +1,28 @@
+{
+  "name": "product-store-db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard --fix",
+    "setup": "node setup.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "4",
+    "defaults": "^1.0.3",
+    "dotenv": "^16.0.1",
+    "inquirer": "^8.2.4",
+    "pg": "^8.7.3",
+    "sequelize": "^6.20.1",
+    "standard": "^17.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
+    "sinon": "^14.0.0",
+    "sqlite3": "^5.0.8"
+  }
+}
