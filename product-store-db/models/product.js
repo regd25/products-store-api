@@ -23,6 +23,10 @@ module.exports = ProductModel = (config) => {
     price: {
       type: DataTypes.FLOAT,
       allowNull: false
+    },
+    inventory: {
+      type: DataTypes.INTEGER,
+      default: 0
     }
   })
 }
