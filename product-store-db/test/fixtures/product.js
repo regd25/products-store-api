@@ -28,4 +28,5 @@ module.exports = {
   single: product,
   findAll: products,
   findById: id => products.filter(p => p.id === id).shift(),
+  findByCode: code => products.filter(p => p.code === code).shift()
 }

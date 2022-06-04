@@ -3,8 +3,8 @@
 const { DataTypes} = require('sequelize')
 const setupDatabase = require('../lib/db')
 
-module.exports = UserModel = (config) => {
-  const sequelize = new setupDatabase(config)
+module.exports = (config) => {
+  const sequelize = setupDatabase(config)
 
   return sequelize.define('user', {
     id: {

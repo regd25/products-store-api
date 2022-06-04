@@ -3,7 +3,7 @@
 const { DataTypes} = require('sequelize')
 const setupDatabase = require('../lib/db')
 
-module.exports = ProductModel = (config) => {
+module.exports = (config) => {
   const sequelize = new setupDatabase(config)
 
   return sequelize.define('product', {
