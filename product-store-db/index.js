@@ -17,24 +17,24 @@ module.exports = async (config) => {
     query: {
       raw: true
     },
+    logging: () => {},
     ...config
   }
-
-  const connection = setupDatabase(config)
+  const sequelize = setupDatabase(config)
   const ProductModel = setupProductModel(config)
   const UserModel = setupUserModel(config)
 
-  await connection.authenticate()
+  await sequelize.authenticate()
 
   if(config.setup) {
     await sequelize.sync({ force: true })
   }
 
   const Product = setupProduct(ProductModel)
-  // const User = setupUser(UserModel)
+  const User = setupUser(UserModel)
 
   return {
     Product,
-    // User
+    User
   }
 }

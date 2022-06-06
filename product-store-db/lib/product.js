@@ -1,4 +1,3 @@
-const { Op } = require("sequelize");
 
 module.exports = (ProductModel) => {
   async function findAll() {
@@ -18,10 +17,7 @@ module.exports = (ProductModel) => {
   async function createOrUpdate(product) {
     const condition = {
       where: {
-        [Op.or]: [
-          { code: product.code },
-          { id: product.id },
-        ]
+        id: product.id,
       }
     }
     const existingProduct = await ProductModel.findOne(condition)

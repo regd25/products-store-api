@@ -3,7 +3,6 @@ const { expect } = require('chai')
 const sinon = require('sinon')
 const fixtures = require('./fixtures/product')
 const proxyquire = require('proxyquire')
-const { Op } = require("sequelize");
 
 const config = {}
 
@@ -27,21 +26,9 @@ const codeArgs = {
   where: { code }
 }
 
-const updateArgs = {
+const idArgs = {
   where: {
-    [Op.or]: [
-      { code },
-      { id },
-    ]
-  }
-
-}
-const createArgs = {
-  where: {
-    [Op.or]: [
-      { code: newProduct.code },
-      { id: newProduct.id },
-    ]
+    id
   }
 }
 
@@ -50,7 +37,7 @@ beforeEach(async () => {
 
   //Model findAll stub
   ProductStub.findAll = sandbox.stub()
-  ProductStub.findAll.withArgs().returns(fixtures.findAll)
+  ProductStub.findAll.withArgs().returns(fixtures.all)
 
   //Model findByPk
   ProductStub.findByPk = sandbox.stub()
@@ -59,20 +46,18 @@ beforeEach(async () => {
   //Model finOne stub
   ProductStub.findOne = sandbox.stub()
   ProductStub.findOne.withArgs(codeArgs).returns(fixtures.findByCode(code))
-  ProductStub.findOne.withArgs(updateArgs).returns(single)
+  ProductStub.findOne.withArgs(idArgs).returns(single)
 
   //Model create stub
   ProductStub.create = sandbox.stub()
   ProductStub.create.withArgs(newProduct).returns({
     toJSON() { return newProduct }
   })
-  ProductStub.create.withArgs(single).returns({
-    toJSON() { return newProduct }
-  })
+
 
   //Model update stub
   ProductStub.update = sandbox.stub()
-  ProductStub.update.withArgs(single, updateArgs).returns(single)
+  ProductStub.update.withArgs(single, idArgs).returns(single)
 
   const setupDatabase = proxyquire('../', {
     './models/product': () => ProductStub
@@ -93,7 +78,7 @@ describe('Product', () => {
     expect(ProductStub.findAll.calledOnce, "Shold be called once").to.be.true
     expect(ProductStub.findAll.calledWith(), "Shold be called without args").to.be.true
 
-    expect(products, "shoud be the same").to.deep.equal(fixtures.findAll)
+    expect(products, "shoud be the same").to.deep.equal(fixtures.all)
   })
 
   it('#findById', async () => {
@@ -111,7 +96,7 @@ describe('Product', () => {
 
     expect(ProductStub.findOne.called, "Shold be called").to.be.true
     expect(ProductStub.findOne.calledOnce, "Shold be called once").to.be.true
-    expect(ProductStub.findOne.calledWith(codeArgs), "Shold be called with code rgs").to.be.true
+    expect(ProductStub.findOne.calledWith(codeArgs), "Shold be called with code args").to.be.true
 
     expect(product, "shoud be the same").to.deep.equal(fixtures.findByCode(code))
   })
@@ -121,7 +106,6 @@ describe('Product', () => {
 
     expect(ProductStub.findOne.called, "Shold be called").to.be.true
     expect(ProductStub.findOne.calledOnce, "Shold be called once").to.be.true
-    expect(ProductStub.findOne.calledWith(createArgs), "Shold be called with id or code args").to.be.true
 
     expect(ProductStub.create.called, "Shold be called").to.be.true
     expect(ProductStub.create.calledOnce, "Shold be called once").to.be.true
@@ -135,7 +119,7 @@ describe('Product', () => {
 
     expect(ProductStub.findOne.called, "Shold be called").to.be.true
     expect(ProductStub.findOne.calledTwice, "Shold be called twice").to.be.true
-    expect(ProductStub.findOne.calledWith(updateArgs), "Shold be called with id or code args").to.be.true
+    expect(ProductStub.findOne.calledWith(idArgs), "Shold be called with id or code args").to.be.true
 
     expect(ProductStub.update.called, "Shold be called").to.be.true
     expect(ProductStub.update.calledOnce, "Shold be called once").to.be.true
